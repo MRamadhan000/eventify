@@ -1,0 +1,18 @@
+version: '3.9'
+
+services:
+  eventify-db:
+    image: postgres:16
+    container_name: eventify-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: eventify
+      POSTGRES_USER: eventify_user
+      POSTGRES_PASSWORD: eventify_password
+    ports:
+      - "5433:5432"
+    volumes:
+      - eventify_db_data:/var/lib/postgresql/data
+
+volumes:
+  eventify_db_data:

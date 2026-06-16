@@ -8,6 +8,8 @@ import * as bcrypt from 'bcrypt';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 import { CustomersService } from '../customers/customers.service';
+import { Role } from './enum/role.enum';
+import { Roles } from './decorator/roles.decorator';
 
 @Injectable()
 export class AuthService {
@@ -52,6 +54,7 @@ export class AuthService {
     const payload = {
       sub: customer.id,
       email: customer.email,
+      role: Role.CUSTOMER,
     };
 
     return {
@@ -68,7 +71,6 @@ export class AuthService {
     const customer =
       await this.customersService.create(registerDto);
 
-    // MENGEMBALIKAN DATA MENTAH SAJA
     return {
       customer: {
         id: customer.id,
@@ -78,4 +80,18 @@ export class AuthService {
       },
     };
   }
+
+
+  async getProfile(customerId: number) {
+    const customer = await this.customersService.findOne(customerId);
+
+    return {
+      id: customer.id,
+      name: customer.name,
+      email: customer.email,
+      address: customer.address,
+      role: Role.CUSTOMER,
+    };
+  }
+
 }
